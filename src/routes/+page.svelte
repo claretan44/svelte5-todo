@@ -1,5 +1,5 @@
 <script>
-    import TodoList from './TodoList.svelte';
+    import TodoListApp from './TodoListApp.svelte';
 </script>
 
-<TodoList/>
+<TodoListApp/>
