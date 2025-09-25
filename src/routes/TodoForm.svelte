@@ -1,7 +1,17 @@
 <script lang="ts">
+	import type { Todo } from "$lib/utils/types";
+
 
     //props
-    let {submitAction, todoDefaultValues} =$props();
+    let {
+        submitAction, 
+        todoDefaultValues,
+        mode,
+    }:{
+        submitAction: (title:string, description:string, dueDate:string, priority:string) => void;
+        todoDefaultValues: Todo;
+        mode: string;
+    } =$props();
 
     //state variables: will bind to form inputs
     let todoTitle = $state(todoDefaultValues.title);
@@ -9,6 +19,17 @@
     let todoDueDate = $state(todoDefaultValues.dueDate);
     let todoPriority = $state(todoDefaultValues.priority);
 
+    $effect(()=>{
+        $inspect(todoDefaultValues);
+    })
+    $effect(()=>{
+        if(mode === 'edit'){
+            todoTitle = todoDefaultValues.title;
+            todoDescription = todoDefaultValues.description;
+            todoDueDate = todoDefaultValues.dueDate;
+            todoPriority = todoDefaultValues.priority;
+        }
+    });
     //options for the priority dropdown
     const priorities = ['Low', 'Medium', 'High'];
 
@@ -16,11 +37,13 @@
     function submitHandler(e: SubmitEvent){
         e.preventDefault();
         submitAction(todoTitle, todoDescription, todoDueDate, todoPriority);
-        //reset the form 
-        todoTitle = '';
-        todoDescription = '';
-        todoDueDate ='2025-12-31';
-        todoPriority = 'High';
+        //reset to blank form for adding
+        if (mode === 'add'){
+            todoTitle = '';
+            todoDescription = '';
+            todoDueDate ='2025-12-31';
+            todoPriority = 'High';
+        }
     }
 </script>
 
@@ -46,5 +69,7 @@
             {/each}
         </select>
     </label>
-    <button type="submit">Add</button>
+    <button type="submit">
+        {mode === 'add'? 'Add': 'Save'}
+    </button>
 </form>
