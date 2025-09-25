@@ -5,11 +5,12 @@
     import Modal from "./Modal.svelte";
     import TodoList from "./TodoList.svelte";
     import type {Todo} from "../lib/utils/types";
+    import { onMount } from 'svelte';
 
 
     //variables
     //later on load this from local storage
-    const todos =$state<Todo[]>([
+    let todos =$state<Todo[]>([
         {
             id: 'todo-1',
             title: 'My First Todo',
@@ -19,6 +20,18 @@
             completed: false
         }
     ]);
+
+    onMount(() => {
+        const todoItems = window.localStorage.getItem("todoList");
+        if(todoItems != null){
+            try{
+                todos = JSON.parse(todoItems);
+            }
+            catch(e){
+                console.log(e);
+            }
+        }
+    });
     
     const priorityMap: StringIndex = {
         'High': 3,
@@ -29,12 +42,13 @@
     interface StringIndex {
         [key:string]: any;
     }
-    /*
-    let orderedTodos = $derived(
-        todos.sort((a,b) => {
+    
+    let orderedTodos = $derived<Todo[]>(
+        [...todos].sort((a,b) => {
             return (priorityMap[b.priority] - priorityMap[a.priority]);
         })
-    );*/
+    );
+    
     let addTodoIsOpen: boolean = $state(false);
     let editTodoIsOpen: boolean = $state(false);
     let todoIndexToEdit: number= $state(0);
@@ -64,6 +78,7 @@
             completed: false
         };
         todos.push(newTodo);
+        saveToLocalStorage();
     }
 
     function openEditingWindow(index: number){
@@ -81,9 +96,15 @@
             completed: false
         };
         todos[todoIndexToEdit] = editedTodo;
+        saveToLocalStorage();
     }
     function deleteTodo(index: number){
         todos.splice(index, 1);
+        saveToLocalStorage();
+    }
+
+    function saveToLocalStorage(){
+        window.localStorage.setItem("todoList", JSON.stringify(todos));
     }
 
     //debug effect
@@ -92,9 +113,10 @@
         //$inspect(todos);
     }
     );
+
 </script>
 
-<TodoList {todos} {completeTodo} {deleteTodo} {openEditingWindow}/>
+<TodoList todos={orderedTodos} {completeTodo} {deleteTodo} {openEditingWindow}/>
 
 <button onclick={()=>{addTodoIsOpen=true;}}>Add New Todo</button>
 

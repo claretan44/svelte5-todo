@@ -14,6 +14,9 @@
     
 </script>
 
+{#if todos.length === 0}
+<h1>You have no todos</h1>
+{/if}
 {#each todos as todo, index (todo.id)}
 <div class="flex">
     <input 
