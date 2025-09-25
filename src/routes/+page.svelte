@@ -1,2 +1,15 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+<script>
+    import TodoList from './TodoList.svelte';
+    //later on load this from local storage
+    const todos =$state([
+        {
+            id: 'todo-1',
+            title: 'My First Todo',
+            description: 'Enter your description here',
+
+
+        }
+    ]);
+</script>
+
+<TodoList {todos}/>
