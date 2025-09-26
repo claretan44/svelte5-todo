@@ -8,8 +8,8 @@
     import { onMount } from 'svelte';
 
 
-    //variables
-    //later on load this from local storage
+    //todo-list variable
+    //default value for todo list:
     let todos =$state<Todo[]>([
         {
             id: 'todo-1',
@@ -20,7 +20,7 @@
             completed: false
         }
     ]);
-
+    //on component creation, load in local storage if it exists
     onMount(() => {
         const todoItems = window.localStorage.getItem("todoList");
         if(todoItems != null){
@@ -32,7 +32,7 @@
             }
         }
     });
-    
+    //the following are for sorting by priority
     const priorityMap: StringIndex = {
         'High': 3,
         'Medium': 2,
@@ -42,18 +42,17 @@
     interface StringIndex {
         [key:string]: any;
     }
-    
+     
     let orderedTodos = $derived<Todo[]>(
         [...todos].sort((a,b) => {
             return (priorityMap[b.priority] - priorityMap[a.priority]);
         })
     );
-    
+    //these variables are for communicating with the modal add/edit window
     let addTodoIsOpen: boolean = $state(false);
     let editTodoIsOpen: boolean = $state(false);
     let todoIndexToEdit: number= $state(0);
     let todoToEdit: Todo = $derived(todos[todoIndexToEdit]);
-
     const blankTodo:Todo ={
         id: '',
         title: '',
@@ -62,6 +61,7 @@
         priority: 'High',
         completed: false
     }
+
     //callback functions for modifying todos and todolist
 
     function completeTodo(todo: Todo){
@@ -107,15 +107,9 @@
         window.localStorage.setItem("todoList", JSON.stringify(todos));
     }
 
-    //debug effect
-    $effect(() =>{
-        $inspect(todoIndexToEdit);
-        //$inspect(todos);
-    }
-    );
-
 </script>
 
+<h1>My Todos</h1>
 <TodoList todos={orderedTodos} {completeTodo} {deleteTodo} {openEditingWindow}/>
 
 <button onclick={()=>{addTodoIsOpen=true;}}>Add New Todo</button>
