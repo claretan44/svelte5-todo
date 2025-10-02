@@ -30,7 +30,7 @@ export const actions = {
     }
 
     try {
-        // Replace with your actual API endpoint
+        // Call the dummyjson login API
         const response = await fetch('https://dummyjson.com/auth/login', {
             method: 'POST',
             headers: {
@@ -56,15 +56,10 @@ export const actions = {
             return fail(401,{error: 'Please check your username and password.'})
         }
     
-    /*
+    
       // Successful login - store the token securely
-      cookies.set('auth-token', result.token, {
-        path: '/',
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
-        maxAge: 60 * 60 * 24 * 7 // 1 week
-      }); */
+      cookies.set('auth-token', result.accessToken, {
+        path: '/'}); 
 
       // Redirect to the proper route on successful login
       throw redirect(303, '/');
