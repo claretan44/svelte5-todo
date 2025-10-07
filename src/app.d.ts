@@ -10,7 +10,7 @@ declare global {
         	email: string;
         	firstName: string;
         	lastName: string;
-        	token: string;
+			image: string;
       		};
 		}
 		// interface PageData {}
