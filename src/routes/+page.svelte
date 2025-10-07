@@ -4,15 +4,41 @@
 
     let { data }: { data: PageData } = $props();
     import { page } from '$app/state';
+	import NavBar from './NavBar.svelte';
+	import UserProfile from './UserProfile.svelte';
+
+    let todoDisplayed = $state(true);
+    let profileDisplayed = $state(false);
+
+    function displayTodo(){
+        todoDisplayed = true;
+        profileDisplayed = false;
+    }
+
+    function displayProfile(){
+        todoDisplayed = false;
+        profileDisplayed = true;
+    }
   
 </script>
 
-{#if page.url.pathname !== '/login'}
-    <nav>
-      <form method="POST" action="/logout">
-        <button type="submit">Logout</button>
-      </form>
-    </nav>
-  {/if}
 
-<TodoListApp user={data.user} />
+<NavBar {displayTodo} {displayProfile} />
+<main class="flex justify-center p-4">
+    {#if todoDisplayed}
+        {#if data.user}
+            <TodoListApp user={{id: data.user.id, username: data.user.username}} />
+        {/if}
+    {/if}
+
+    {#if profileDisplayed}
+        {#if data.user}
+            <UserProfile userProfile={{
+                image: data.user.image, 
+                firstName: data.user.firstName, 
+                lastName: data.user.lastName,
+                email: data.user.email}} />
+        {/if}
+    {/if}
+</main>
+

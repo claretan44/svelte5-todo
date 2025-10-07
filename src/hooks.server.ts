@@ -25,7 +25,7 @@ export const handle: Handle = async ({ event, resolve }) => {
           email: userData.email,
           firstName: userData.firstName,
           lastName: userData.lastName,
-          token: token
+          image: userData.image
         };
       }
     } catch (error) {

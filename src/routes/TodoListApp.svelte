@@ -116,10 +116,13 @@
 
 </script>
 
-<h1>My Todos</h1>
-<TodoList todos={orderedTodos} {completeTodo} {deleteTodo} {openEditingWindow}/>
+<div class="flex flex-col items-center">
+    <h1 class="my-4 text-center text-2xl font-semibold">Welcome {user.username}! Here are your todos:</h1>
+    <TodoList todos={orderedTodos} {completeTodo} {deleteTodo} {openEditingWindow}/>
 
-<button onclick={()=>{addTodoIsOpen=true;}}>Add New Todo</button>
+    <button onclick={()=>{addTodoIsOpen=true;}}>Add New Todo</button>
+</div>
+
 
 <Modal bind:isOpen = {addTodoIsOpen}>
     <TodoForm todoDefaultValues={blankTodo} submitAction={addTodo} mode="add"/>
