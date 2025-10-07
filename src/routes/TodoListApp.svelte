@@ -2,11 +2,13 @@
 
     //imports
     import TodoForm from "./TodoForm.svelte";
-    import Modal from "./Modal.svelte";
+    import Modal from "../lib/components/Modal.svelte";
     import TodoList from "./TodoList.svelte";
     import type {Todo} from "../lib/utils/types";
     import { onMount } from 'svelte';
 
+    // Accept user data as prop
+    let { user }: { user: { id: number; username: string } } = $props();
 
     //todo-list variable
     //default value for todo list:
@@ -20,9 +22,14 @@
             completed: false
         }
     ]);
+
+    // Generate user-specific localStorage key
+    const getStorageKey = () => `todoList_user_${user.id}`;
+
     //on component creation, load in local storage if it exists
     onMount(() => {
-        const todoItems = window.localStorage.getItem("todoList");
+        const storageKey = getStorageKey();
+        const todoItems = window.localStorage.getItem(storageKey);
         if(todoItems != null){
             try{
                 todos = JSON.parse(todoItems);
@@ -104,7 +111,7 @@
     }
 
     function saveToLocalStorage(){
-        window.localStorage.setItem("todoList", JSON.stringify(todos));
+        window.localStorage.setItem(getStorageKey(), JSON.stringify(todos));
     }
 
 </script>
