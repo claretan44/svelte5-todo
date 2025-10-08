@@ -8,6 +8,7 @@ let {
 } =$props();
 </script>
 
+<h1 class="my-4 text-center text-2xl font-semibold">User Profile</h1>
 <div class="max-w-sm rounded overflow-hidden shadow-md" id="userProfile">
     <img class="w-full" id="profileImage" src={userProfile.image} alt="profile">
     <div class="px-6 py-4">

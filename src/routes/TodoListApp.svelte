@@ -117,17 +117,17 @@
 </script>
 
 <div class="flex flex-col items-center">
-    <h1 class="my-4 text-center text-2xl font-semibold">Welcome {user.username}! Here are your todos:</h1>
+    <h1 class="my-4 text-center text-2xl font-semibold">Welcome {user.username}!</h1>
+    <p class="text-center"> Here are your todos: </p>
+    <button onclick={()=>{addTodoIsOpen=true;}} class="bg-purple-800 rounded-full text-white px-4 py-1 hover:bg-purple-600 mt-3">Add New Todo</button>
     <TodoList todos={orderedTodos} {completeTodo} {deleteTodo} {openEditingWindow}/>
-
-    <button onclick={()=>{addTodoIsOpen=true;}}>Add New Todo</button>
 </div>
 
 
-<Modal bind:isOpen = {addTodoIsOpen}>
-    <TodoForm todoDefaultValues={blankTodo} submitAction={addTodo} mode="add"/>
+<Modal bind:isOpen = {addTodoIsOpen} title="Add New Todo">
+    <TodoForm bind:modalIsOpen={addTodoIsOpen} todoDefaultValues={blankTodo} submitAction={addTodo} mode="add"/>
 </Modal>
 
-<Modal bind:isOpen = {editTodoIsOpen}> 
-    <TodoForm todoDefaultValues={todoToEdit} submitAction={editTodo} mode="edit"/>
+<Modal bind:isOpen = {editTodoIsOpen} title="Edit Todo"> 
+    <TodoForm bind:modalIsOpen={editTodoIsOpen} todoDefaultValues={todoToEdit} submitAction={editTodo} mode="edit"/>
 </Modal>

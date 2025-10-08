@@ -24,7 +24,7 @@
 
 
 <NavBar {displayTodo} {displayProfile} />
-<main class="flex justify-center p-4">
+<main class="flex flex-col justify-center items-center p-4">
     {#if todoDisplayed}
         {#if data.user}
             <TodoListApp user={{id: data.user.id, username: data.user.username}} />
