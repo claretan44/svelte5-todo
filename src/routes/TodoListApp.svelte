@@ -58,8 +58,7 @@
     //these variables are for communicating with the modal add/edit window
     let addTodoIsOpen: boolean = $state(false);
     let editTodoIsOpen: boolean = $state(false);
-    let todoIndexToEdit: number= $state(0);
-    let todoToEdit: Todo = $derived(todos[todoIndexToEdit]);
+    let todoIdToEdit: string= $state('');
     const blankTodo:Todo ={
         id: '',
         title: '',
@@ -68,6 +67,9 @@
         priority: 'High',
         completed: false
     }
+    let todoToEdit: Todo = $derived(
+        todos.find(t => t.id === todoIdToEdit) || blankTodo
+    );
 
     //callback functions for modifying todos and todolist
 
@@ -88,25 +90,22 @@
         saveToLocalStorage();
     }
 
-    function openEditingWindow(index: number){
+    function openEditingWindow(todoId: string){
         editTodoIsOpen = true;
-        todoIndexToEdit  = index;
+        todoIdToEdit  = todoId;
     }
 
     function editTodo(title:string, description:string, dueDate:string, priority:string){
-        let editedTodo:Todo = {
-            id: 'todo-' + (todoIndexToEdit + 1),
-            title: title,
-            description: description,
-            dueDate: dueDate,
-            priority: priority,
-            completed: false
-        };
-        todos[todoIndexToEdit] = editedTodo;
+        const todoToEdit = todos.find(t => t.id === todoIdToEdit);
+        if(!todoToEdit) return;
+        todoToEdit.title = title;
+        todoToEdit.description = description;
+        todoToEdit.dueDate = dueDate;
+        todoToEdit.priority = priority;
         saveToLocalStorage();
     }
-    function deleteTodo(index: number){
-        todos.splice(index, 1);
+    function deleteTodo(todoId: string){
+        todos = todos.filter(t => t.id !== todoId);
         saveToLocalStorage();
     }
 
